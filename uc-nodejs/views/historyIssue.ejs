@@ -1,0 +1,117 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/historyIssue.css"/>
+<body>
+	<header class="uc-header-normal uc-header-bg">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/kefu")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+            <%= title %>
+		</div>
+	</header>
+	<div id="history-container">
+		<div id="history-issue-container" class="uc-button-group">
+            <% if(qusList && qusList.rows != ""){ %>
+                <% qusList.rows.forEach(function (qus) { %>
+
+                <div class="history-issue-list uc-btn-padding-lf" onclick="enterQuesInfo(<%=qus.id %>,<%=qus.status %>)">
+                    <div class="history-issue-list-con">
+                        <span class="uc-button-text">
+                            <%=qus.qus %>
+                        </span>
+                        <p class="history-state">状态：<span date-state="<%=qus.status %>" class="history-state-success"></span></p>
+                    </div>
+                    <i class="fa fa-angle-right uc-button-arrow"></i>
+                </div>
+                <% }); %>
+            <% } %>
+		</div>
+		<div id="history-load-more" class="uc-button-submit" onclick="loadMore()">
+			<%= qusMore %>…
+		</div>
+	</div>
+</body>
+
+<script type="text/html" id="list-item">
+    {{each rows as qus i}}
+    <div class="history-issue-list uc-btn-padding-lf" onclick="enterQuesInfo({{qus.id}},{{qus.status}})">
+        <div class="history-issue-list-con">
+				<span class="uc-button-text">
+					{{qus.qus}}
+				</span>
+            <p class="history-state"><%= status %>：<span date-state={{qus.status}} class="history-state-success"></span></p>
+        </div>
+        <i class="fa fa-angle-right uc-button-arrow"></i>
+    </div>
+    {{/each}}
+</script>
+<script>
+var curIndex = 0;
+
+$(document).ready(function() {
+    getStatus();
+});
+
+function getStatus () {
+	var state = $(".history-state span");
+	for (var i = 0; i < state.length; i++) {
+		var stateVal=state.eq(i).attr("date-state");
+		var str = "";
+		var classN = "";
+		switch (stateVal){
+			case "0": 
+				str = <%- JSON.stringify(status0) %>;
+				classN="history-state-no";
+			    break;
+			case "1": 
+				str = <%- JSON.stringify(status1) %>;
+				classN="history-state-success";
+				break;
+			case "2": 
+				str = <%- JSON.stringify(status2) %>;
+				classN="history-state-doing";
+				break;
+			case "3": 
+				str = <%- JSON.stringify(status3) %>;
+				classN="history-state-close";
+				break;
+			case "4": 
+				str = <%- JSON.stringify(status3) %>;
+				classN="history-state-close";
+				break;
+			case "5": 
+				str = <%- JSON.stringify(status2) %>;
+				classN="history-state-doing";
+				break;
+		}
+		state.eq(i)[0].className=classN;
+		state.eq(i).html(str); 
+	}
+}
+
+function enterQuesInfo (hisId) {
+	uc.common.linkTo("/kefu/questionInfo?questionId=" + hisId +"");
+}
+
+function loadMore () {
+	loadIssueList(curIndex);
+}
+
+function loadIssueList (index) {
+	var data = {
+		start: index + 10,
+		rows: 10
+	}
+    curIndex = index + 10;
+	uc.common.showWaiting();
+	$.post(URL_QUS_MORE, data, function(result, data) {
+		if (result) {
+            var listHtml = template("list-item", result);
+            $("#history-issue-container").append(listHtml);
+			getStatus();
+		}
+		uc.common.hideWaiting();
+	});
+}
+</script>
+</html>

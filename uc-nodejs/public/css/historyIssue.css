@@ -1,0 +1,41 @@
+body {
+	background-color: #EEEEEE;
+}
+.history-issue-list{
+	border-bottom: 1px solid #DDDDDD;
+	background-color: #FFFFFF;
+}
+.history-issue-list .uc-button-arrow{
+	line-height: 64px;
+}
+.history-issue-list-con{
+	width: 86%;
+	display: inline-block;
+	overflow: hidden;
+	text-overflow:ellipsis; 
+	white-space:nowrap; 
+	padding: 12px 0;
+}
+.history-issue-list-con .uc-button-text{
+	font-size: 1.6rem;
+}
+.history-state{
+	margin:4px 0 0 0;
+	font-size: 1.4rem;
+}
+.history-state-doing,.history-state-no{
+	color: #CC6600;
+}
+.history-state-success{
+	color: #008000;
+}
+.history-state-ignore,.history-state-close{
+	color:#AAAAAA;
+}
+#history-container {
+	margin-top: 18px;
+}
+#history-load-more {
+	text-align: center;
+	margin: 10px auto;
+}

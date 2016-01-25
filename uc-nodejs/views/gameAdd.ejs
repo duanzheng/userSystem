@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel='stylesheet' href='/component/am/css/amazeui.min.css'/>
+    <link rel='stylesheet' href='/css/config.css'/>
+    <link rel="stylesheet" type="text/css" href="/css/gameConfig.css"/>
+</head>
+<body>
+<div class="am-container">
+    <div class="am-form-group">
+        <label for="linkUrl">游戏名称</label>
+        <input id="name" type="text" class="am-form-field" name="linkUrl">
+    </div>
+    <div class="am-form-group">
+        <label for="linkUrl">跳转地址</label>
+        <input id="url" type="text" class="am-form-field" name="linkUrl" placeholder="请输入带有http://的完整地址">
+    </div>
+    <div class="am-form-group">
+        <label for="inputFile">图标</label>
+
+        <div>
+            <div class="am-btn-group">
+                <button class="am-btn am-btn-default btn-upload">
+                    选择图片
+                    <input id="inputFile" class="input-upload" type="file" accept="image/jpeg,image/png"
+                           name="inputFile" onchange="showFileAddr()">
+                </button>
+                <button class="am-btn am-btn-primary" onclick="uploadFile()">开始上传</button>
+            </div>
+        </div>
+        <input id="imageAddr" type="text" class="am-form-field" placeholder="图片地址" disabled style="margin-top: 5px">
+
+        <div id="progressContainer" class="am-progress am-progress-striped am-progress am-active upload-progress">
+            <div id="uploadProgress" class="am-progress-bar am-progress-bar-secondary" style="width: 0%"></div>
+        </div>
+        <div id="uploadImgContainer" style="display: none">
+            <label>图片预览</label>
+            <div>
+                <img id="uploadImg" class="uploadImg" src="">
+            </div>
+        </div>
+    </div>
+    <div class="am-btn-group">
+        <button type="button" class="am-btn am-btn-default" onclick='history.back()'>返回</button>
+        <button type="button" class="am-btn am-btn-primary" onclick="addGame()">确认</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" rel="script" src="/component/jquery/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" rel="script" src="/component/am/js/amazeui.min.js"></script>
+<script type="text/javascript" rel="script" src="/js/constant.js"></script>
+<script type="text/javascript">
+    function addGame() {
+        var data = {
+            name: $("#name").val(),
+            icon: $("#uploadImg").attr("src"),
+            url: $("#url").val()
+        }
+        $.post(URL_ADD_GAME, data, function (result) {
+            if (result) {
+                window.location.href = "/config";
+            }
+        });
+    }
+
+    function showFileAddr() {
+        $("#imageAddr").val($("#inputFile").val());
+    }
+
+    function uploadFile() {
+        $("#uploadProgress").css("width", "0%");
+        $("#progressContainer").addClass("am-active");
+
+        var fileObj = document.getElementById("inputFile").files[0];
+
+        //formData对象
+        var form = new FormData();
+        form.append("inputFile", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", URL_UPLOAD_FILE, true);
+        xhr.onload = function (data) {
+            var responseData = this.responseText;
+            if (responseData) {
+                console.log("upload data: " + responseData);
+                $("#uploadImgContainer").show();
+                $("#uploadImg").attr("src", responseData);
+            }
+        };
+        xhr.upload.addEventListener("progress", progressFunction, false);
+        xhr.send(form);
+    }
+
+    function progressFunction(evt) {
+        if (evt.lengthComputable) {
+            var percent = Math.round(evt.loaded / evt.total * 100);
+            $("#uploadProgress").css("width", percent + "%");
+            if (percent == 100) {
+                $("#progressContainer").removeClass("am-active");
+            }
+        }
+    }
+</script>
+</html>

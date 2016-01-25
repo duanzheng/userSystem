@@ -1,0 +1,241 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/myInfo.css"/>
+<body>
+	<header class="uc-header-normal">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/user")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+            <%= title %>
+		</div>
+	</header>
+	<div class="uc-bg-normal">
+		<div id="mi-issue-container" class="uc-button-group">
+			<div class="uc-button">
+				<div class="uc-button-title">
+                    <%= userName %>
+				</div>
+				<span id="account-name" class="uc-button-text">
+					<%= account %>
+				</span>
+			</div>
+			<div class="uc-button">
+				<div class="uc-button-title">
+                    <%= phone %>
+				</div>
+				<span id="phone-num" class="uc-button-text">
+					<% if (basicUserInfo) { %>
+					<%=basicUserInfo.telphone %>
+					<% } %>
+				</span>
+			</div>
+			<div class="uc-button">
+				<div class="uc-button-title">
+                    <%= email %>
+				</div>
+				<span id="email-text" class="uc-button-text">
+					<% if (basicUserInfo) { %>
+					<%=basicUserInfo.email %>
+					<% } %>
+				</span>
+			</div>
+		</div>
+		<div id="mi-comment-container" class="uc-button-group">
+			<div class="uc-button">
+				<div class="uc-button-title">
+                    <%= sex %>
+				</div>
+				<span id="mi-gender" class="uc-button-text">
+					<% if (userInfo) { %>
+                        <% if (userInfo.sex == 1) { %>
+                        <%= male %>
+                        <% } else if (userInfo.sex == 2) { %>
+                        <%= female %>
+                        <% } %>
+					<% } %>
+				</span>
+				<select id="mi-gender-select" onchange="setGender()">
+					<option value=0><%= clear %></option>
+					<option value=1><%= male %></option>
+					<option value=2><%= female %></option>
+				</select>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+			<div id="mi-birthday-btn" class="uc-button">
+				<div class="uc-button-title">
+                    <%= birth %>
+				</div>
+				<span id="mi-birthday" class="uc-button-text">
+					<% if (userInfo) { %>
+					    <%=userInfo.birthday %>
+					<% } %>
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+			<div class="uc-button" onclick='showModal("mi-modal-qq")'>
+				<div class="uc-button-title">
+                    <%= qq %>
+				</div>
+				<span id="mi-qq-num" class="uc-button-text">
+					<% if (userInfo) { %>
+					    <%=userInfo.qq %>
+					<% } %>
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+			<!--<div class="uc-button" onclick='showModal("mi-modal-desc")'>-->
+				<!--<div class="uc-button-title">-->
+					<!--简介-->
+				<!--</div>-->
+				<!--<div id="mi-desc" class="uc-button-text">-->
+					<!--<% if (userInfo) { %>-->
+					<!--<%=userInfo.desc %>-->
+					<!--<% } %>-->
+				<!--</div>-->
+				<!--<i class="fa fa-angle-right uc-button-arrow"></i>-->
+			<!--</div>-->
+		</div>
+	</div>
+	<div class="uc-modal-container">
+		<div id="mi-modal-qq" class="uc-modal">
+			<div class="uc-modal-title">
+                <%= qqEdit %>
+			</div>
+			<div class="uc-modal-bd">
+				<input id="input-qq" class="uc-modal-input" type="tel"
+				<% if (userInfo) { %>
+				value="<%=userInfo.qq %>"
+				<% } %>
+				/>
+			</div>
+			<div class="uc-modal-footer">
+				<div class="uc-button-block uc-modal-cancel" onclick="closeModal()">
+                    <%= btnCancel %>
+				</div>
+				<div class="uc-button-block uc-modal-confirm" onclick="saveqq()">
+                    <%= btnConfirm %>
+				</div>
+			</div>
+		</div>
+		<div id="mi-modal-desc" class="uc-modal">
+			<div class="uc-modal-title">
+                <%= descEdit %>
+			</div>
+			<div class="uc-modal-bd">
+				<textarea rows="3" id="input-desc" class="uc-modal-textarea"></textarea>
+			</div>
+			<div class="uc-modal-footer">
+				<div class="uc-button-block uc-modal-cancel" onclick="closeModal()">
+                    <%= btnCancel %>
+				</div>
+				<div class="uc-button-block uc-modal-confirm" onclick="saveDesc()">
+                    <%= btnConfirm %>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	initDatePicker();
+});
+
+function initBody () {
+	$("body").css("height", $(window).height());
+}
+
+function initDatePicker () {
+	$('#mi-birthday-btn').datepicker({
+		viewMode: 2,
+	}).on('changeDate.datepicker.amui', function(event) {
+		console.log(event.date);
+      	var timestr = uc.common.formData(event.date);
+      	$("#mi-birthday").text(timestr);
+      	var data = {
+      		birth: timestr
+      	}
+		$.post(URL_USER_SET_BIRTH, data, function (data) {
+			uc.common.hideWaiting();
+		});
+    });
+}
+
+function showModal (modalId) {
+	$("body").addClass("uc-body-modal-on");
+	$(".uc-modal-container").show();
+	$("#" + modalId).show();
+	var selfHeight = $("#" + modalId).height();
+	var selfWidth = $("#" + modalId).width();
+	document.addEventListener('touchmove', preventScroll, false);
+}
+
+function closeModal () {
+	$("body").removeClass("uc-body-modal-on");
+	$(".uc-modal-container").hide();
+	$(".uc-modal").hide();
+	document.removeEventListener('touchmove', preventScroll, false);
+}
+
+function saveqq () {
+	closeModal();
+	uc.common.showWaiting();
+	var data = {
+		qq: $("#input-qq").val()
+	}
+	$.post(URL_USER_SET_QQ, data, function (data) {
+		uc.common.hideWaiting();
+		if (data) {
+			$("#mi-qq-num").text($("#input-qq").val());
+		}
+	});
+}
+
+function saveDesc () {
+	closeModal();
+	uc.common.showWaiting();
+	var data = {
+		desc: $("#input-desc").val()
+	}
+	uc.req.post(URL_USER_DESC_SET, data, function (result, data) {
+		uc.common.hideWaiting();
+		if (result) {
+			var descVal = $("#input-desc").val();
+//			if (descVal.length > 10) {
+//				descVal = descVal.substring(0, 10) + "…";
+//			}
+			$("#mi-desc").text(descVal);
+		}
+	});
+}
+
+function preventScroll (e) {
+	e.preventDefault();
+}
+
+function setGender () {
+	var data = {
+		gender: $("#mi-gender-select").val()
+	}
+	uc.common.showWaiting();
+	$.post(URL_USER_SET_GENDER, data, function (data) {
+		uc.common.hideWaiting();
+		if (data.result) {
+			var genderSelect = $("#mi-gender-select").val();
+			switch (genderSelect){
+				case "0":
+					$("#mi-gender").text("");
+					break;
+				case "1":
+					$("#mi-gender").text(<%- JSON.stringify(male) %>);
+					break;
+				case "2":
+					$("#mi-gender").text(<%- JSON.stringify(female) %>);
+					break;
+				default:
+					break;
+			}
+		}
+	});
+}
+</script>
+</html>

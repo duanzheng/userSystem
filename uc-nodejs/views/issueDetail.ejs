@@ -1,0 +1,23 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/issueDetail.css"/>
+<body>
+	<header class="uc-header-normal uc-header-bg">
+		<div class="uc-header-back" onclick='history.back()'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+            <%= title %>
+		</div>
+	</header>
+	<div class="content-container">
+        <% if(faqDetail){ %>
+            <div id="issue-title">
+                <%=faqDetail.question %>
+            </div>
+            <div id="issue-content">
+                <%=faqDetail.answer %>
+            </div>
+        <% } %>
+	</div>
+</body>
+</html>

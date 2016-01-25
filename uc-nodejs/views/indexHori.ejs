@@ -1,0 +1,214 @@
+<link rel="stylesheet" type="text/css" href="/css/indexHori.css"/>
+<% include header %>
+<body>
+<div id="index-information" class="index-page-container">
+	<div id="index-header">
+		<img id="index-logo" src="/img/ppgame_logo.png" />
+	</div>
+	<div id="index-basic">
+		<div id="index-head-container" onclick='uc.common.linkTo("/user/setHead")'>
+			<img id="index-head" src="/img/user_logo.png"/>
+		</div>
+		<div id="index-camera-icon" onclick='uc.common.linkTo("/user/setHead")'>
+			<i class="fa fa-camera"></i>
+		</div>
+		<div id="index-name">
+			测试用户
+		</div>
+		<!--<div id="index-score-container">
+			<div id="index-coin">
+				<img class="index-score-icon" src="/img/icon_coin.png"/>
+				<span id="index-coin-text" class="index-score-text">
+					PG币：688
+				</span>
+			</div>
+			<div id="index-integral">
+				<img class="index-score-icon" src="/img/icon_integral.png"/>
+				<span id="index-integral-text" class="index-score-text">
+					PG积分：888
+				</span>
+			</div>
+		</div>-->
+		<div id="index-btn-container">
+			<div id="index-btn-data" class="index-btn" onclick='uc.common.linkTo("/user/myInfo")'>
+				<i class="fa fa-user"></i>
+				我的资料
+			</div>
+			<!--<div id="index-btn-msg" class="index-btn" onclick='uc.common.linkTo("/user/myMsg")'>
+				<i class="fa fa-envelope-o"></i>
+				我的消息
+				<span id="index-btn-msg-num">
+					3
+				</span>
+			</div>-->
+		</div>
+	</div>
+	<div id="index-app">
+		<div id="index-app-title">可能感兴趣的游戏</div>
+		<div id="index-app-list">
+			<div class="swiper-container index-swiper-container">
+				<div class="swiper-wrapper index-swiper-wrapper">
+				    <div class="swiper-slide">
+				    	<div class="index-app-item">
+				    		<img class="index-app-icon" src="/img/xjkz_logo.png"></img>
+				    		<div class="index-app-text">仙剑客栈1</div>
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="index-app-item">
+				    		<img class="index-app-icon" src="/img/xjkz_logo.png"></img>
+				    		<div class="index-app-text">仙剑客栈2</div>
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="index-app-item">
+				    		<img class="index-app-icon" src="/img/xjkz_logo.png"></img>
+				    		<div class="index-app-text">仙剑客栈3</div>
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="index-app-item">
+				    		<img class="index-app-icon" src="/img/xjkz_logo.png"></img>
+				    		<div class="index-app-text">仙剑客栈4</div>
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="index-app-item">
+				    		<img class="index-app-icon" src="/img/xjkz_logo.png"></img>
+				    		<div class="index-app-text">仙剑客栈5</div>
+				    	</div>
+				    </div>
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="index-kefu" class="index-page-container">
+	<header class="uc-header-normal">
+		客服
+	</header>
+	<div class="uc-bg-normal">
+		<div id="index-issue-container" class="uc-button-group">
+			<div class="uc-button" onclick='uc.common.linkTo("/kefu/issueSubmit")'>
+				<i class="fa fa-comment uc-button-icon"></i>
+				<span class="uc-button-text">
+					提交问题
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+			<div class="uc-button" onclick='uc.common.linkTo("/kefu/historyIssue")'>
+				<i class="fa fa-history uc-button-icon"></i>
+				<span class="uc-button-text">
+					历史提问
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+		</div>
+		<div id="index-comment-container" class="uc-button-group">
+			<div class="uc-button" onclick='uc.common.linkTo("weixin:")'>
+				<i class="fa fa-weixin uc-button-icon"></i>
+				<span class="uc-button-text">
+					客服微信
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+			<div class="uc-button" onclick='uc.common.linkTo("mqq:")'>
+				<i class="fa fa-qq uc-button-icon"></i>
+				<span class="uc-button-text">
+					VIP客服QQ
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="index-footer">
+	<ul>
+		<li id="index-tab-me" class="index-footer-active" data-page = "index-information">
+			<div class="index-footer-content">
+				<div class="fa fa-user index-footer-icon"></div>
+				<div class="index-footer-text">我</div>
+			</div>
+		</li>
+		<li id="index-tab-kefu" class="index-footer-normal" data-page = "index-kefu">
+			<div class="index-footer-content">
+				<div class="fa fa-headphones index-footer-icon"></div>
+				<div class="index-footer-text">客 服</div>
+			</div>
+		</li>
+	</ul>
+</div>
+</body>
+<script type="text/javascript">
+var curPage = "";
+var swiperIsInit = false;
+var tabMap = {
+	"index-information": "index-tab-me",
+	"index-kefu": "index-tab-kefu"	
+}
+
+$(document).ready(function() {
+//	setContainerHeight();
+	initFooter();
+	initTab();
+});
+
+function setContainerHeight () {
+	$(".index-page-container").css("height", $(window).height() - 49);
+}
+
+function initFooter () {
+	$(".index-footer li").click(function() {
+		$(".index-footer li").each(function(index) {
+			$(this).removeClass("index-footer-active");
+			$(this).addClass("index-footer-normal");
+		});
+		$(this).removeClass("index-footer-normal");
+		$(this).addClass("index-footer-active");
+		
+		var newPage = $(this).data("page");
+		if(newPage != curPage) {
+			$("#" + curPage).hide();
+			$("#" + newPage).show();
+			if (!swiperIsInit) {
+				initSwiper();
+				swiperIsInit = true;
+			}
+			curPage = newPage;
+			uc.sessionStorage.set(KEY_CUR_PAGE, curPage);
+		}
+	});
+}
+
+function initSwiper () {
+	var mySwiper = new Swiper('.swiper-container',{
+	slidesPerView : 3,
+	slidesPerGroup : 3,
+	pagination : '.swiper-pagination',
+	});
+}
+
+function initTab () {
+	var curPageStorage = uc.sessionStorage.get(KEY_CUR_PAGE);
+	if (curPageStorage) {
+		curPage = curPageStorage;
+	}
+	else {
+		curPage = "index-information";
+	}
+	$("#" + curPage).show();
+	if (curPage == "index-information") {
+		initSwiper();
+		swiperIsInit = true;
+	}
+	$(".index-footer li").each(function(index) {
+		$(this).removeClass("index-footer-active");
+		$(this).addClass("index-footer-normal");
+	});
+	var curTab = tabMap[curPage];
+	$("#" + curTab).removeClass("index-footer-normal");
+	$("#" + curTab).addClass("index-footer-active");
+}
+</script>
+</html>

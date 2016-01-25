@@ -1,0 +1,120 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/index.css"/>
+<body>
+<div id="index-information" class="index-page-container">
+    <div id="index-header">
+        <!--<img id="index-logo" src="../img/ppgame_logo.png" />-->
+    </div>
+    <div id="index-basic">
+        <div id="index-head-container">
+            <img id="index-head" src="/img/head.jpg"/>
+        </div>
+        <!--<div id="index-camera-icon" onclick='uc.common.linkTo("setHead.html")'>
+            <i class="fa fa-camera"></i>
+        </div>-->
+        <div id="index-name">
+            <%=account %>
+        </div>
+        <div id="index-btn-container">
+            <div id="index-btn-data" class="index-btn" onclick='uc.common.linkTo("/user/myInfo")'>
+                <!--<i class="fa fa-user"></i>-->
+                <%= myInfo %>
+            </div>
+            <% if (userInfo && userInfo.state == 5) { %>
+                <% if (hasPhone == "false") { %>
+                    <div id="index-btn-bind" class="index-btn" onclick='uc.common.linkTo("/user/bindEmail")'>
+                        <!--<i class="fa fa-paperclip"></i>-->
+                        <%= bindAccount %>
+                    </div>
+                <% } else { %>
+                    <div id="index-btn-bind" class="index-btn" onclick='uc.common.linkTo("/user/bindAccount")'>
+                        <!--<i class="fa fa-paperclip"></i>-->
+                        <%= bindAccount %>
+                    </div>
+                <% } %>
+            <% } else { %>
+            <div id="index-btn-modify" class="index-btn" onclick='uc.common.linkTo("/user/accountSet")'>
+                <!--<i class="fa fa-paperclip"></i>-->
+                <%= setAccount %>
+            </div>
+            <% } %>
+        </div>
+    </div>
+    <div id="index-app">
+        <div id="index-app-title">
+            <%= myFav %>
+        </div>
+        <div id="index-app-list">
+            <div class="swiper-container index-swiper-container">
+                <div id="swiper-item-container" class="swiper-wrapper index-swiper-wrapper">
+                    <% if (apps) { %>
+                    <% apps.forEach(function (app) { %>
+                    <div class="swiper-slide" onclick='window.location.href = "<%=app.url %>"'>
+                        <div class="index-app-item">
+                            <img class="index-app-icon" src="<%=app.icon %>">
+                            <div class="index-app-text"><%=app.name %></div>
+                        </div>
+                    </div>
+                    <% }); %>
+                    <% } %>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var curPage = "";
+    var swiperIsInit = false;
+    var tabMap = {
+        "index-information": "index-tab-me",
+        "index-kefu": "index-tab-kefu"
+    }
+
+    $(document).ready(function() {
+        initSwiper();
+//        initPage();
+    });
+
+    function initData () {
+        var urlStr = document.location.href;
+        var urlData = getQueryString(urlStr);
+        if (urlData && !$.isEmptyObject(urlData)) {
+            uc.sessionStorage.set(KEY_GAME_DATA, urlData);
+        }
+        var gameData = uc.sessionStorage.get(KEY_GAME_DATA);
+        $("#index-name").text(gameData.account);
+    }
+
+    function initPage () {
+        var userInfoData = {
+
+        }
+        uc.req.post(URL_USERINFO_GET, userInfoData, function(result, data) {
+            if (result) {
+                if (data.data.state == 5) {
+                    $("#index-btn-bind").css("display", "inline-block");
+                }
+                else {
+                    $("#index-btn-modify").css("display", "inline-block");
+                }
+                if (data.data.telphone) {
+                    uc.sessionStorage.set(KEY_CUR_PHONE, data.data.telphone);
+                }
+                if (data.data.email) {
+                    uc.sessionStorage.set(KEY_CUR_EMAIL, data.data.email);
+                }
+            }
+        });
+    }
+
+    function initSwiper () {
+        var mySwiper = new Swiper('.swiper-container',{
+            slidesPerView : 3,
+            slidesPerGroup : 3,
+            pagination : '.swiper-pagination'
+        });
+    }
+</script>
+</html>

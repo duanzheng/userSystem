@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数字天空-游戏业务受理平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel='stylesheet' href='/component/am/css/amazeui.min.css'/>
+</head>
+<body>
+<!--<div class="login-header">-->
+    <!--<div class="am-g">-->
+        <!--<img src="/img/LOGO2.png" class="login-header-img"/>-->
+    <!--</div>-->
+    <!--<hr/>-->
+<!--</div>-->
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <form class="am-form">
+            <label for="username">用户名:</label>
+            <input type="text" name="" id="username" required="required">
+            <br>
+            <label for="password">密码:</label>
+            <input type="password" name="" id="password" required="required">
+            <br>
+            <!--<label class="am-checkbox login-checkbox">
+                <input id="remember-me" type="checkbox" value="" data-am-ucheck>记住密码
+            </label>-->
+            <br/>
+        </form>
+        <div class="am-cf">
+            <button id="btn-login" class="am-btn am-btn-primary am-btn-sm am-fl" onclick="login()">登录</button>
+            <span id="login-prompt" class="login-prompt"></span>
+        </div>
+        <hr>
+        <div class="am-copyright">
+            <p>&copy; Copyright 2015 - Digital Sky. All Rights Reserved</p>
+        </div>
+    </div>
+</div>
+</body>
+<!--注意js文件导入顺序-->
+<script type="text/javascript" rel="script" src="/component/jquery/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" rel="script" src="/component/am/js/amazeui.min.js"></script>
+<script type="text/javascript" rel="script" src="/js/constant.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).keydown(function (event) {
+            if (event.which == 13) {
+                login();
+            }
+        });
+    });
+
+    function login() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+
+        if (username == undefined || username == "") {
+            $("#login-prompt").text("用户名不能为空");
+            return;
+        }
+        else if (password == undefined || password == "") {
+            $("#login-prompt").text("密码不能为空");
+            return;
+        }
+
+        disableBtn();
+        setTimeout("loginTimeOut()", 10000);
+        var data = {
+            username: username,
+            password: password
+        }
+        $.post(URL_LOGIN, data, function (data) {
+            if (data.result) {
+                window.location.href = "/config/gameConfig";
+            }
+            else {
+                $("#login-prompt").text("您的账户或密码不正确！");
+            }
+            recoverBtn();
+        });
+    }
+
+    function loginTimeOut() {
+        if ($("#btn-login").attr("disabled") != undefined) {
+            recoverBtn();
+            $("#login-prompt").text("登录超时");
+        }
+    }
+
+    function disableBtn() {
+        var btnLogin = $("#btn-login");
+        if (btnLogin.attr("disabled") == undefined) {
+            btnLogin.attr("disabled", true);
+            btnLogin.html('<span class="am-icon-spinner am-icon-spin"></span>正在登录…');
+        }
+    }
+
+    function recoverBtn() {
+        var btnLogin = $("#btn-login");
+        if (btnLogin.attr("disabled") != undefined) {
+            btnLogin.removeAttr("disabled");
+            btnLogin.html("登录");
+        }
+    }
+</script>
+</html>

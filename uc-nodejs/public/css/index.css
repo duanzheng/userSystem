@@ -1,0 +1,180 @@
+.index-page-container {
+	overflow: auto;
+}
+.index-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	border-top: 1px solid #DDDDDD;
+}
+.index-footer ul {
+	padding: 0;
+	margin: 0;
+}
+.index-footer ul li {
+	position: relative;
+	width: 50%;
+	float: left;
+	list-style: none;
+	text-align: center;
+	height: 48px;
+}
+.index-footer-icon {
+	font-size: 2rem;
+	margin-top: 6px;
+}
+.index-footer-text {
+	font-size: 1.4rem;
+}
+.index-footer-active {
+	color: #59c2e6;
+}
+.index-footer-normal {
+	color: #777777;
+}
+#index-information {
+}
+#index-kefu {
+	display: none;
+}
+#index-header {
+	background-color: #f1f1f1;
+	height: 60px;
+}
+#index-logo {
+	width: 156px;
+	margin: 24px 0 0 24px;
+}
+#index-basic {
+	position: relative;
+	background-color: #f1f1f1;
+}
+#index-head-container {
+	position: absolute;
+	height: 84px;
+	width: 84px;
+	border-radius: 50%;
+	overflow: hidden;
+	/*left: calc(50% - 42px);*/
+	left: 50%;
+	margin-left: -42px;
+	top: -42px;
+}
+#index-head {
+	height: 84px;
+	width: 84px;
+	border-radius: 50%;
+}
+#index-camera-icon {
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	border-radius: 50%;
+	background-color: #59c2e6;
+	color: #FFF;
+	text-align: center;
+	/*left: calc(50% - 13px);*/
+	left: 50%;
+	margin-left: -13px;
+	top: 29px;
+}
+#index-name {
+	color: #288aab;
+	font-size: 1.6rem;
+	text-align: center;
+	padding: 63px 0 15px 0;
+	margin: 0 18px;
+	font-weight: bold;
+}
+#index-score-container {
+	margin-top: 12px;
+	zoom: 1;
+	overflow: hidden;
+}
+#index-coin {
+	height: 27px;
+	/*width: calc(50% - 18px);*/
+	width: 50%;
+	box-sizing: border-box;
+	float: left;
+	/*margin-left: 18px;*/
+	padding-left: 18px;
+	border-right: 1px solid #CCCCCC;
+	text-align: center;
+	vertical-align: middle;
+}
+#index-integral {
+	height: 27px;
+	/*width: calc(50% - 19);*/
+	width: 50%;
+	box-sizing: border-box;
+	float: right;
+	/*margin-right: 18px;*/
+	padding-right: 18px;
+	text-align: center;
+	vertical-align: middle;
+}
+.index-score-icon {
+	width: 25px;
+	vertical-align: middle;
+}
+.index-score-text {
+	vertical-align: middle;
+	font-size: 1.4rem;
+	color: #288aab;
+}
+#index-btn-container {
+	overflow: hidden;
+	zoom: 1;
+	padding-bottom: 15px;
+	text-align: center;
+}
+.index-btn {
+	width: 150px;
+	height: 50px;
+	border-radius: 3px;
+	background-color: #59c2e6;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 50px;
+	font-size: 1.6rem;
+}
+#index-btn-data {
+	display: inline-block;
+}
+#index-btn-bind {
+	display: inline-block;
+}
+#index-btn-msg {
+	float: right;
+}
+#index-btn-msg-num {
+	background: red;
+	border-radius: 50%;
+	font-weight: bolder;
+	padding: 2px 5px;
+}
+#index-app-title {
+	padding: 18px 0 18px 18px;
+	font-size: 1.6rem;
+	color: #288aab;
+}
+.index-app-item {
+	text-align: center;
+}
+.index-app-icon {
+	width: 84px;
+}
+.index-app-text {
+	text-align: center;
+	padding-top: 6px;
+	font-size: 1.4rem;
+	color: #288aab;
+}
+.index-swiper-container {
+	height: 141px;
+}
+#index-btn-modify {
+	display: inline-block;
+}

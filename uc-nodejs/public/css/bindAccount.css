@@ -1,0 +1,29 @@
+
+#veri-code {
+	width: 70px;
+}
+#ba-input-container {
+	zoom: 1;
+	overflow: hidden;
+	margin-top: 10px;
+	background-color: #FFFFFF;
+}
+#bind-email-text {
+	margin: 10px;
+}
+.ba-btn-block {
+	text-align: center;
+    line-height: 40px;
+    font-size: 1.6rem;
+    background-color: #59c2e6;
+    color: #FFFFFF;
+    margin: 0 10px;
+  	border-radius: 3px;
+}
+#prompt-bind-success {
+	display: none;
+}
+#prompt-bind-failed {
+	width: 80%;
+	left: 10%;
+}

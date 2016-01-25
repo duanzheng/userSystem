@@ -1,0 +1,73 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/issueSearch.css"/>
+<body class="uc-bg-normal">
+	<header class="uc-header-normal uc-header-bg">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/kefu/issueSubmit")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+            <%= title %>
+		</div>
+		<div class="uc-header-right" onclick='uc.common.linkTo("/kefu/contactUs")'>
+            <%= submitQus %>
+        </div>
+	</header>
+	<div class="uc-search">
+		<input id="is-search-input" class="uc-input-search" type="search" placeholder="<%= srhPlaceholder %>" onkeyup="searchIssue()" />
+	</div>
+	<div class="uc-bg-normal">
+		<div id="search-issue-container" class="uc-button-group">
+            <% if(faqList){ %>
+                <% faqList.forEach(function (faq) { %>
+                <div class="uc-button uc-btn-padding-lf" onclick='window.location.href="/kefu/issueDetail?id=<%=faq.id %>"'>
+                    <span class="uc-button-text">
+                        <%=faq.question %>
+                    </span>
+                    <i class="fa fa-angle-right uc-button-arrow"></i>
+                </div>
+                <% }); %>
+            <% } %>
+		</div>
+        <div id="issue-search-container" class="uc-button-group">
+        </div>
+		<div id="search-no-container">
+			<span class="search-no-text"><%= cannotFind %></span>
+			<div class="uc-button-submit" onclick='uc.common.linkTo("/kefu/contactUs")'><%= submitQus %></div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+function searchIssue () {
+	var searchText = $("#is-search-input").val();
+	if (!searchText) {
+        $("#search-issue-container").show();
+        $("#issue-search-container").hide();
+		return;
+	}
+	var data = {
+		key: searchText
+	}
+	$.post(URL_FAQ_SEARCH, data, function(result) {
+        if(result){
+            $("#issue-search-container").empty();
+            for (i=0; i< result.length; i++){
+                var searchHtml = '';
+                    searchHtml += '<div class="uc-button uc-btn-padding-lf" onclick="showDetail(' + result[i].id + ')">';
+                    searchHtml += '<span class="uc-button-text">';
+                    searchHtml += '' + result[i].question + '';
+                    searchHtml += '</span>';
+                    searchHtml += '<i class="fa fa-angle-right uc-button-arrow"></i>';
+                    searchHtml += '</div>';
+                $("#issue-search-container").append(searchHtml);
+            }
+            $("#search-issue-container").hide();
+            $("#issue-search-container").show();
+        }
+	});
+}
+
+function showDetail (faqId) {
+	uc.common.linkTo("/kefu/issueDetail?id=" + faqId + "");
+}
+</script>
+</html>

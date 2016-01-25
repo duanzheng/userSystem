@@ -1,0 +1,88 @@
+.game-list {
+}
+
+.game-ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.game-li {
+    margin: 10px 30px 20px 30px;
+    float: left;
+}
+
+.game-item {
+    width: 180px;
+    height: 230px;
+    transition: all 300ms;
+    overflow: hidden;
+    border-radius: 5px;
+    position: relative;
+}
+.game-item:hover {
+    transform: scale(1.1);
+}
+.game-item-del {
+    position: absolute;
+    text-align: center;
+    z-index: 99;
+    top: 4px;
+    right: 8px;
+}
+.game-item-del-btn {
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    line-height: 100%;
+}
+.game-item-img {
+    position: relative;
+    margin: 15px 15px 0px 15px;
+    height: 150px;
+    width: 150px;
+    overflow: hidden;
+    top: 0px;
+    transition: all 300ms;
+    border-radius: 20px;
+}
+.game-item-msg {
+    position: relative;
+    padding: 10px 15px 0px 15px;
+    padding-top: 10px;
+    font-size: 14px;
+    top: 0px;
+    transition: all 300ms;
+}
+.game-item-text {
+    font-size: 16px;
+    text-align: center;
+    padding-bottom: 5px;
+    color: #555555;
+}
+.game-add-btn {
+    width: 150px;
+    height: 150px;
+    margin: 15px;
+    border: 3px solid #BBBBBB;
+    border-radius: 20px;
+    text-align: center;
+    color: #BBBBBB;
+    transition: all 200ms;
+}
+.game-add-btn:hover {
+    color: #555555;
+    border: 3px solid #555555;
+}
+.game-add-btn-icon {
+    font-size: 60px;
+    margin-top: 24px;
+}
+.game-add-btn-text {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: -15px;
+}

@@ -1,0 +1,49 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/accountSet.css"/>
+<body>
+<header class="uc-header-normal">
+	<div class="uc-header-back" onclick='uc.common.linkTo("/user")'>
+		<i class="fa fa-angle-left"></i>
+	</div>
+    <div class="uc-header-text">
+        <%= title %>
+    </div>
+</header>
+<div id="as-btn-container" class="uc-button-group">
+    <% if (hasPhone == "true") { %>
+        <% if (userInfo.telphone) { %>
+        <div id="set-pwd-by-phone" class="uc-button" onclick='uc.common.linkTo("/user/setPwdByPhone")'>
+                <span class="as-button-text uc-button-text">
+                    <%= setPwdByPhone %>
+                </span>
+            <i class="fa fa-angle-right uc-button-arrow"></i>
+        </div>
+        <% } else { %>
+        <div id="bind-phone" class="uc-button" onclick='uc.common.linkTo("/user/bindPhone")'>
+                <span class="as-button-text uc-button-text">
+                    <%= bindPhone %>
+                </span>
+            <i class="fa fa-angle-right uc-button-arrow"></i>
+        </div>
+        <% } %>
+    <% } %>
+	<% if (userInfo.email) { %>
+	<div id="set-pwd-by-email" class="uc-button" onclick='uc.common.linkTo("/user/setPwdByEmail")'>
+		<span class="as-button-text uc-button-text">
+			<%= setPwdByEmail %>
+		</span>
+		<i class="fa fa-angle-right uc-button-arrow"></i>
+	</div>
+	<% } else { %>
+    <div id="bind-email" class="uc-button" onclick='uc.common.linkTo("/user/bindEmailAgain")'>
+		<span class="as-button-text uc-button-text">
+			<%= bindEmail %>
+		</span>
+        <i class="fa fa-angle-right uc-button-arrow"></i>
+    </div>
+    <% } %>
+</div>
+</body>
+<script type="text/javascript">
+</script>
+</html>

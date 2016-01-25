@@ -1,0 +1,39 @@
+#text-bind-success {
+  	text-align: center;
+  	font-size: 3rem;
+  	font-weight: bold;
+  	color: #33CC00;
+    margin-top: 5%;
+}
+#text-go-email {
+	text-align: center;
+  	margin-top: 20px;
+    padding: 0 10px;
+  	font-size: 1.6rem;
+}
+#text-back-now {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.8rem;
+    color: #fff;
+}
+#text-back-now span {
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #59c2e6;
+    border-radius: 3px;
+    margin: 0 auto;
+    display: inline-block;
+}
+#text-back-main {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 1.6rem;
+	color: #666666;
+}
+#text-back-main span {
+    color: #58c1e5;
+    margin: 0 5px;
+}

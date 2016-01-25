@@ -1,0 +1,19 @@
+#be-input-container {
+	zoom: 1;
+	overflow: hidden;
+	margin-top: 10px;
+	background-color: #FFFFFF;
+}
+.be-btn-block {
+	text-align: center;
+    line-height: 40px;
+    font-size: 1.6rem;
+    background-color: #59c2e6;
+    color: #FFFFFF;
+    margin: 0 10px;
+  	border-radius: 3px;
+}
+#email-addr {
+	float: left;
+	line-height: 40px;
+}

@@ -1,0 +1,16 @@
+body {
+	background-color: #EEEEEE;
+}
+.content-container {
+	margin-top: 15px;
+	background-color: #FFF;
+}
+#issue-title {
+	font-size: 2rem;
+	font-weight: bold;
+	padding-top: 10px;
+}
+#issue-content {
+	font-size: 1.6rem;
+	padding: 10px 0;
+}

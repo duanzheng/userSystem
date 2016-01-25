@@ -1,0 +1,48 @@
+.module-title {
+    margin: 16px 0;
+}
+.admin-table {
+    margin-top: 16px;
+    font-size: 1.4rem;
+}
+.admin-table td {
+    vertical-align: middle !important;
+}
+.admin-table-opera {
+    width: 80px;
+}
+.btn-upload {
+    position: relative;
+}
+.input-upload {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.upload-progress {
+    margin-top: 5px;
+}
+.uploadImg {
+    max-width: 964px;
+}
+.font-green {
+    color: #4aaa4a;
+}
+.admin-select {
+    width: 100%;
+    line-height: 1.2;
+    padding: .5em;
+    font-size: 1.6rem;
+    border: 1px solid #ccc;
+    color: #555;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.contentBox {margin: 20px 0; overflow: hidden;}
+.ds-table {text-align: center; font-size: 14px;}
+.ds-table th {text-align: center; vertical-align: middle !important;}
+.ds-table td { vertical-align: middle !important;}

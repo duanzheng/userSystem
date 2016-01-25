@@ -1,0 +1,111 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/bindAccount.css"/>
+<body>
+	<header class="uc-header-normal">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/user/accountSet")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+        <div class="uc-header-text">
+            <%= title %>
+        </div>
+	</header>
+	<div id="ba-input-container">
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+				<%= phoneNum %>：
+			</div>
+			<input type="tel" id="tel-num" class="uc-input-text" value="" />
+		</div>
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+                <%= vCode %>：
+			</div>
+			<input type="url" id="veri-code" class="uc-input-text" value="" />
+			<div id="gain-veri-code" class="uc-input-button" onclick="getVeriCode()" disabled="disabled"><%= getVcode %></div>
+		</div>
+		<div class="ba-btn-block" onclick="bindPhone()">
+            <%= bindAccount %>
+		</div>
+	</div>
+	<div id="prompt-bind-success" class="uc-prompt">
+		<%= bindSuccess %>！
+	</div>
+</body>
+<script type="text/javascript">
+var canSendSMS = true;
+var timingCount = 59;
+var timerId = "";
+
+function getVeriCode () {
+	if (canSendSMS) {
+		blurVeriBtn();
+		var data = {
+			telphone: $("#tel-num").val(),
+		}
+		$.post(URL_USER_GET_VCODE, data, function (result) {
+
+        });
+	}
+}
+
+function blurVeriBtn () {
+	canSendSMS = false;
+	$("#gain-veri-code").addClass("uc-btn-blur");
+	$("#gain-veri-code").text("60" + <%- JSON.stringify(reGetVcode) %>);
+	timerId = setInterval(function() {
+		$("#gain-veri-code").text(timingCount + <%- JSON.stringify(reGetVcode) %>);
+		timingCount--;
+		if (timingCount == -1) {
+			canSendSMS = true;
+			timingCount = 59;
+			$("#gain-veri-code").removeClass("uc-btn-blur");
+			$("#gain-veri-code").text(<%- JSON.stringify(getVcode) %>);
+			clearInterval(timerId);
+		}
+	}, 1000)
+}
+
+function checkPhoneNum(v){
+//	var a = /^((\(\d{3}\))|(\d{3}\-))?13\d{9}|14[57]\d{8}|15\d{9}|18\d{9}$/ ;
+    var a = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+	if (!v.match(a)) {
+		showPrompt(<%- JSON.stringify(checkPhoneNum) %>);
+		return false;		
+	}
+	return true;
+}
+
+function checkVeriCode(v){
+    if (v.length == '') {
+        showPrompt(<%- JSON.stringify(checkVeriCode) %>);
+        return false;
+    }else if(v.length != 6){
+        showPrompt(<%- JSON.stringify(checkVeriCodeAll) %>);
+        return false;
+    }
+    return true;
+}
+
+function bindPhone () {
+	if (checkVeriCode($("#veri-code").val())) {
+		var data = {
+			telphone: $("#tel-num").val(),
+			vcode: $("#veri-code").val()
+		}
+		uc.common.showWaiting();
+		$.post(URL_USER_BIND_PHONE, data, function(result) {
+			uc.common.hideWaiting();
+			if (result.result == 0) {
+				$("#prompt-bind-success").show();
+				setTimeout(function() {
+					uc.common.linkTo("/user");
+				}, 2000);
+			}
+			else {
+				showPrompt(result.msg);
+			}
+		});
+	}
+}
+</script>
+</html>

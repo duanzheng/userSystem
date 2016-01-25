@@ -1,0 +1,26 @@
+body {
+	background-color: #EEEEEE;
+	padding-bottom: 30px;
+}
+#kefu-issue-container {
+	margin-top: 10px;
+}
+#kefu-comment-container {
+	margin-top: 18px;
+}
+#kefu-notice {
+	margin: 10px;
+	padding: 5px;
+	background-color: #FFFFFF;
+	border-radius: 3px;
+}
+#kefu-notice-title {
+	font-size: 1.6rem;
+	text-align: center;
+	line-height: 25px;
+	font-weight: bold;
+}
+#kefu-notice-content {
+	font-size: 1.4rem;
+	line-height: 18px;
+}

@@ -1,0 +1,38 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/kefu.css"/>
+<body>
+<header class="uc-header-normal">
+    <div class="uc-header-text">
+        <%= title %>
+    </div>
+</header>
+<div id="kefu-notice">
+	<div id="kefu-notice-title">
+	<% if (notice) { %>
+		<%=notice.title %>
+	<% } %>
+	</div>
+	<div id="kefu-notice-content">
+		<% if (notice) { %>
+			<%-notice.content %>
+		<% } %>
+	</div>
+</div>
+<div id="kefu-issue-container" class="uc-button-group">
+	<div class="uc-button" onclick='uc.common.linkTo("/kefu/issueSubmit")'>
+		<i class="fa fa-comment uc-button-icon"></i>
+		<span class="uc-button-text">
+			<%= issueSubmit %>
+		</span>
+		<i class="fa fa-angle-right uc-button-arrow"></i>
+	</div>
+	<div class="uc-button" onclick='uc.common.linkTo("/kefu/historyIssue")'>
+		<i class="fa fa-history uc-button-icon"></i>
+		<span class="uc-button-text">
+			<%= historyIssue %>
+		</span>
+		<i class="fa fa-angle-right uc-button-arrow"></i>
+	</div>
+</div>
+</body>
+</html>

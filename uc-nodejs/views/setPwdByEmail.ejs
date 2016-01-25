@@ -1,0 +1,70 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/bindEmail.css"/>
+<script src="/js/MD5.js" type="text/javascript" charset="utf-8"></script>
+<body>
+	<header class="uc-header-normal">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/user/accountSet")'>
+			<i class="fa fa-angle-left"></i>
+	    </div>
+        <div class="uc-header-text">
+            <%= title %>
+        </div>
+	</header>
+	<div id="be-input-container">
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+				<%= currentEmail %>：
+			</div>
+			<div id="email-addr"><% if(userInfo){ %><%=userInfo.email %><% } %></div>
+			<!--<input type="email" id="email" class="uc-input-text" value="" />-->
+		</div>
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+                <%= setPwd %>：
+			</div>
+			<input type="email" id="password" class="uc-input-text" value="" />
+		</div>
+		<div class="be-btn-block" onclick="changePwd()">
+            <%= changePwd %>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	var curEmail = uc.sessionStorage.get(KEY_CUR_EMAIL);
+	if (curEmail) {
+		$("#email-addr").text(curEmail);
+	}
+});
+
+function checkPwd (v) {
+    if (v == "") {
+        showPrompt(<%- JSON.stringify(checkPwd) %>);
+        return false;
+    }else if(v.length < 6){
+        showPrompt(<%- JSON.stringify(checkPwdAll) %>);
+        return false;
+    }
+    return true;
+}
+
+function changePwd () {
+	if (checkPwd($("#password").val())) {
+		var data = {
+			email: $("#email-addr").text(),
+			pwd: $("#password").val()
+		}
+		uc.common.showWaiting();
+		$.post(URL_USER_CHANGE_PWD_BY_EMAIL, data, function(result) {
+			uc.common.hideWaiting();
+			if (result.result == 0) {
+				uc.common.linkTo("/user/bindEmailPrompt");
+			}
+			else {
+				showPrompt(result.msg);
+			}
+		});
+	}
+}
+</script>
+</html>

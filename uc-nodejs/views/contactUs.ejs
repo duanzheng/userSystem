@@ -1,0 +1,158 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/contactUs.css"/>
+<body>
+	<header class="uc-header-normal uc-header-bg">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/kefu/issueSubmit")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+			<%=title %>
+		</div>
+		<div class="uc-header-right" onclick='submitIssue()'>
+            <%= send %>
+        </div>
+	</header>
+	<div id="contact-classify-container">
+		<div class="uc-button-group">
+			<div class="uc-button contact-button">
+				<span id="device-type-text" class="uc-button-text">
+					<%= deviceType %>
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+				<select id="device-type" onchange="setDeviceType()">
+					<option value="0"><%= deviceType %></option>
+					<option value="iOS">iOS</option>
+					<option value="安卓">Android</option>
+				</select>
+			</div>
+			<div class="uc-button contact-button">
+				<span id="contact-classify-text" class="uc-button-text">
+					<%= qusClass %>
+				</span>
+				<i class="fa fa-angle-right uc-button-arrow"></i>
+				<select id="contact-classify-select" onchange="setClassify()">
+					<option value="0"><%= qusClass %></option>
+					<% if (typeList) { %>
+						<% typeList.forEach(function (type) { %>
+						<option value="<%=type.typeid %>"><%=type.typename %></option>
+						<% }); %>
+					<% } %>
+				</select>
+			</div>
+			<div id="param-container">
+			</div>
+		</div>
+	</div>
+	<div class="contact-container">
+		<textarea id="issue-desc" class="contact-text" placeholder="<%= qusDesc %>" rows="5"></textarea>
+	</div>
+	<script type="text/html" id="list-item">
+		{{each data as value i}}
+		<option value="{{value.typeid}}">{{value.typename}}</option>
+		{{/each}}
+	</script>
+	<script type="text/html" id="param-item">
+		{{each params as value i}}
+		<div class="uc-button contact-button">
+			<span class="uc-button-text">
+				{{value.name}}：
+			</span>
+			<input data-id="{{value.paramid}}" class="param-input" placeholder="<%= enter %>{{value.name}}" />
+		</div>
+		{{/each}}
+	</script>
+</body>
+<script type="text/javascript">
+var Time = '';
+var paramList = <%- JSON.stringify(typeList) %>;
+
+$(document).ready(function() {
+    getTime();
+});
+
+function getTime(){
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    Time = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
+    return Time;
+}
+
+function setDeviceType () {
+	var selectValue =  $("#device-type option:selected").text();
+	$("#device-type-text").text(selectValue);
+}
+
+function setClassify () {
+	var selectText = $("#contact-classify-select option:selected").text();
+	var selectValue =  $("#contact-classify-select").val();
+	$("#contact-classify-text").text(selectText);
+    $("#param-container").html("");
+    for (var i = 0; i < paramList.length; i++) {
+        if (paramList[i].typeid == selectValue) {
+            var paramHtml = template("param-item", paramList[i]);
+            $("#param-container").html(paramHtml);
+        }
+    }
+}
+
+function submitIssue () {
+	if (!checkInput()) {
+		showPrompt(<%- JSON.stringify(checkInput) %>);
+		return;
+	}
+	var issueDesc = $("#issue-desc").val();
+	var issueType = $("#contact-classify-select").val();
+	var deviceType = $("#device-type").val();
+	var paramList = {};
+	$("#param-container .param-input").each(function(index) {
+		paramList[$(this).data("id")] = $(this).val();
+	});
+	var data = {
+		originalId: 0,
+        touchTime: Time,
+		qus: issueDesc,
+		typeId: issueType,
+		device: deviceType,
+		params: JSON.stringify(paramList)
+	}
+    console.log(data);
+	uc.common.showWaiting();
+	$.post(URL_QUS_SUBMIT, data, function(result) {
+		uc.common.hideWaiting();
+		if (result) {
+			uc.common.linkTo("/kefu/historyIssue");
+		}
+		else {
+			showPrompt(result);
+		}
+	});
+}
+
+function checkInput () {
+	var ret = true;
+	var deviceType = $("#device-type").val();
+	var issueType = $("#contact-classify-select").val();
+	if (issueType == 0 ||  deviceType == 0) {
+		ret = false;
+	}
+	var paramLength = $("#param-container .param-input").length;
+	if (paramLength > 0) {
+		$("#param-container .param-input").each(function(index) {
+			if (!$(this).val()) {
+				ret = false;
+			}
+		});
+	}
+	if (!$("#issue-desc").val()) {
+		ret = false;
+	}
+	
+	return ret;
+}
+</script>
+</html>

@@ -1,0 +1,227 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/questionInfo.css"/>
+<body class="uc-bg-normal">
+	<header class="uc-header-normal uc-header-bg question-header">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/kefu/historyIssue")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+		<div class="uc-header-text">
+			<%=title %>
+		</div>
+		<div class="uc-header-right" onclick='showDelConfirm()'>
+            <%= qusDel %>
+        </div>
+	</header>
+	<div class="question-info-container">
+		<div id="converse-container" class="question-info">
+            <% if(qusDetail){ %>
+                <% qusDetail.forEach(function (value) { %>
+                        <div class="question-forme">
+                            <div class="question-info-time"><%=value.req_time %></div>
+                            <div class="question-forme-con">
+                                <% if(value.params){ %>
+                                    <% value.params.forEach(function(p){%>
+                                    <p><%= JSON.stringify(p.param_name)%>：<%= JSON.stringify(p.param_value)%></p>
+                                    <br />
+                                    <% }); %>
+                                <% } %>
+                                <p><%=value.qus %></p>
+                            </div>
+                        </div>
+                        <% if(value.reply != ""){ %>
+                            <div class="question-forservice">
+                                <div class="question-info-time"><%=value.treat_time %></div>
+                                <div class="question-forme-con">
+                                    <p><%=value.reply %></p>
+                                </div>
+                            </div>
+                        <% } %>
+                <% }); %>
+            <% } %>
+		</div>
+		<div class="question-info-btn" id="quiz-end-box">
+			<div class="question-info-btn-inner">
+				<div class="uc-button-normal">
+					<%= service %>
+					<select class="question-estimate-slt" id="quiz-end" onchange="endAddAssess()">
+						<option><%= serviceScore %></option>
+						<option value="1"><%= score1 %></option>
+						<option value="2"><%= score2 %></option>
+						<option value="3"><%= score3 %></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="question-footer">
+		<ul>
+			<li class="question-footer-input">
+				<input id="queryVal" placeholder="<%= qusAddEnter %>" />
+			</li>
+			<li class="question-footer-btn">
+				<div class="uc-button-normal stop-add-query" id="addquery" onclick='addQuery()'>
+                    <%= qusAdd %>
+                </div>
+			</li>
+		</ul>
+	</div>
+	<div class="uc-modal-container">
+		<div id="del-confirm" class="uc-modal">
+			<div class="uc-modal-title">
+				<%= qusDelConfirm %>？
+			</div>
+			<div class="uc-modal-footer">
+				<div class="uc-button-block uc-modal-cancel" onclick="closeModal()">
+					<%= btnCancel %>
+				</div>
+				<div class="uc-button-block uc-modal-confirm" onclick="delQuestion()">
+                    <%= btnConfirm %>
+				</div>
+			</div>
+		</div>
+		<div id="del-alert" class="uc-modal">
+			<div class="uc-modal-title">
+				<%= qusDelOver %>！
+			</div>
+			<div class="uc-modal-footer">
+				<div class="uc-button-block uc-modal-cancel" onclick="closeModal()">
+                    <%= btnCancel %>
+				</div>
+				<div class="uc-button-block uc-modal-confirm" onclick="closeModal()">
+                    <%= btnConfirm %>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+var orgId = "";
+var Time = '';
+var result = <%- JSON.stringify(qusDetail) %>;
+var status = result[result.length-1].status;
+
+$(document).ready(function() {
+	initQuestionContainer();
+    initData();
+    getTime();
+});
+
+function getTime(){
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    Time = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
+    return Time;
+}
+
+function initQuestionContainer () {
+	$(".question-info-container").height($(window).height() - 123);
+	window.onresize = function() {
+		$(".question-info-container").height($(window).height() - 123);
+	}
+}
+
+function initData () {
+    if(status == "3" || status == "4"){
+        $("#quiz-end-box").show();
+    }
+    if (status == "1") {
+        $("#addquery").removeClass("stop-add-query");
+    }
+}
+
+function addQuery(){
+	var str = "";
+	var mydate = new Date();
+  	var t=mydate.toLocaleString();
+	var issueVal = $("#queryVal").val();
+	var hasStop = $("#addquery").hasClass("stop-add-query");
+	if (hasStop) {
+		return;
+	}
+	if (issueVal=="") {
+		showPrompt(<%- JSON.stringify(qusAddEnter) %>);
+		return;
+	}
+	
+	var data = {
+        originalId: result[0].id,
+        touchTime: Time,
+        qus: issueVal,
+        typeId: result[0].question_type
+	}
+    console.log(data);
+    uc.common.showWaiting();
+    $.post(URL_QUS_SUBMIT, data, function(result) {
+		uc.common.hideWaiting();
+		if (result) {
+			str += '<div class="question-forme">';
+			str += '	<div class="question-forme-con">';
+			str += '		<p>'+issueVal+'</p>';
+			str += '	</div>';
+			str += '</div>';
+			$("#converse-container").append(str);
+			$("#queryVal").val("");
+			window.location.reload();
+		}
+	});
+}
+
+function endAddAssess () {
+	var selectValue =  $("#quiz-end option:selected").attr("value");
+	
+	var data = {
+        originalId: result[0].id,
+		evaluation: selectValue
+	}
+	$.post(URL_QUS_ASSESS, data, function(result, data) {
+		if (result) {
+			$("#quiz-end-box").hide();
+			$("#addquery").addClass("stop-add-query");
+		}
+	});
+}
+
+function showDelConfirm () {
+	if (status == "3" || status == "4") {
+        showModal("del-confirm")
+	}
+	else{
+        showModal("del-alert")
+	}
+}
+
+function delQuestion () {
+	var data = {
+        questionId : result[0].id
+	}
+    console.log(data);
+	$.post(URL_QUS_DEL, data, function(result, data) {
+        console.log('result: ' + result);
+		if (result) {
+			uc.common.linkTo("/kefu/historyIssue");
+		}
+	});
+}
+
+function showModal (modalId) {
+	$("body").addClass("uc-body-modal-on");
+	$(".uc-modal-container").show();
+	$("#" + modalId).show();
+	var selfHeight = $("#" + modalId).height();
+	var selfWidth = $("#" + modalId).width();
+	document.addEventListener('touchmove', preventScroll, false);
+}
+
+function closeModal () {
+	$("body").removeClass("uc-body-modal-on");
+	$(".uc-modal-container").hide();
+	$(".uc-modal").hide();
+	document.removeEventListener('touchmove', preventScroll, false);
+}
+</script>
+</html>

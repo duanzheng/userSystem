@@ -1,0 +1,131 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/bindAccount.css"/>
+<link rel="stylesheet" type="text/css" href="/css/setPwdByPhone.css"/>
+<script src="/js/MD5.js" type="text/javascript" charset="utf-8"></script>
+<body>
+	<header class="uc-header-normal">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/user/accountSet")'>
+			<i class="fa fa-angle-left"></i>
+		</div>
+        <div class="uc-header-text">
+            <%= title %>
+        </div>
+	</header>
+	<div id="ba-input-container">
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+				<%= phoneNum %>：
+			</div>
+			<div id="tel-num"><% if(userInfo){ %><%=userInfo.telphone %><% } %></div>
+			<!--<input type="tel" id="tel-num" class="uc-input-text" value="" />-->
+		</div>
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+				<%= vCode %>：
+			</div>
+			<input type="url" id="veri-code" class="uc-input-text" value="" />
+			<div id="gain-veri-code" class="uc-input-button" onclick="getVeriCode()" disabled="disabled"><%= getVcode %></div>
+		</div>
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+                <%= setPwd %>：
+			</div>
+			<input type="email" id="password" class="uc-input-text" value="" />
+		</div>
+		<div class="ba-btn-block" onclick="changePwd()">
+            <%= changePwd %>
+		</div>
+	</div>
+	<div id="prompt-bind-success" class="uc-prompt">
+		<%= changeSuccess %>！
+	</div>
+</body>
+<script type="text/javascript">
+var canSendSMS = true;
+var timingCount = 59;
+var timerId = "";
+
+$(document).ready(function() {
+	var curPhoneNum = uc.sessionStorage.get(KEY_CUR_PHONE);
+	if (curPhoneNum) {
+		$("#tel-num").text(curPhoneNum);
+	}
+});
+
+function getVeriCode () {
+	if (canSendSMS) {
+		blurVeriBtn();
+		var data = {
+			telphone: $("#tel-num").text(),
+			version: "1"
+		}
+//		uc.req.post(URL_VERINUM_GET, data, function(result, data) {
+//		});
+        $.post(URL_USER_GET_VCODE, data, function(result, data) {
+        });
+	}
+}
+
+function blurVeriBtn () {
+	canSendSMS = false;
+	$("#gain-veri-code").addClass("uc-btn-blur");
+	$("#gain-veri-code").text("60" + <%- JSON.stringify(reGetVcode) %>);
+	timerId = setInterval(function() {
+		$("#gain-veri-code").text(timingCount + <%- JSON.stringify(reGetVcode) %>);
+		timingCount--;
+		if (timingCount == -1) {
+			canSendSMS = true;
+			timingCount = 59;
+			$("#gain-veri-code").removeClass("uc-btn-blur");
+			$("#gain-veri-code").text(<%- JSON.stringify(getVcode) %>);
+			clearInterval(timerId);
+		}
+	}, 1000)
+}
+
+function checkVeriCode(v){
+    if (v.length == '') {
+        showPrompt(<%- JSON.stringify(checkVeriCode) %>);
+        return false;
+    }else if(v.length != 6){
+        showPrompt(<%- JSON.stringify(checkVeriCodeAll) %>);
+        return false;
+    }
+    return true;
+}
+
+function checkPwd (v) {
+    if (v == "") {
+        showPrompt(<%- JSON.stringify(checkPwd) %>);
+        return false;
+    }else if(v.length < 6){
+        showPrompt(<%- JSON.stringify(checkPwdAll) %>);
+        return false;
+    }
+    return true;
+}
+
+function changePwd () {
+	if (checkVeriCode($("#veri-code").val()) && checkPwd($("#password").val())) {
+		var data = {
+			telphone: $("#tel-num").text(),
+			vcode: $("#veri-code").val(),
+			pwd: $("#password").val()
+		}
+		uc.common.showWaiting();
+		$.post(URL_USER_CHANGE_PWD_BY_PHONE, data, function(result) {
+			uc.common.hideWaiting();
+			if (result.result == 0) {
+				$("#prompt-bind-success").show();
+				setTimeout(function() {
+					uc.common.linkTo("/user");
+				}, 2000);
+			}
+			else {
+				showPrompt(result.msg);
+			}
+		});
+	}
+}
+</script>
+</html>

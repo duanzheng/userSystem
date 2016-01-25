@@ -1,0 +1,30 @@
+#mm-list-container {
+	margin-top: 18px;
+}
+.mm-list-item {
+	background-color: #FFFFFF;
+	overflow: hidden;
+	zoom: 1;
+	padding-left: 12px;
+}
+.mm-list-content {
+	float: left;
+}
+.mm-list-title {
+	font-size: 1.6rem;
+	font-weight: bold;
+	margin-top: 8px;
+}
+.mm-list-intro {
+	font-size: 1.6rem;
+	margin: 4px 0;
+	color: #999999;
+}
+.mm-list-datetime {
+	font-size: 1.4rem;
+	margin-bottom: 8px;
+	color: #999999;
+}
+.mm-list-arrow {
+	line-height: 76px;
+}

@@ -1,0 +1,61 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="/css/setHead.css"/>
+<script src="/component/lrz/lrz.mobile.min.js" type="text/javascript" charset="utf-8"></script>
+<body>
+	<div id="sh-img-container">
+		<img src="" id="sh-img" />
+	</div>
+	<div id="sh-button-container">
+		<div id="sh-button-upload" class="uc-button-block sh-button-upload" onclick="initUpload()">
+			<%= uploadAvatar %>
+			<input id="sh-input-upload" type="file" capture="camera" />
+		</div>
+		<div class="uc-button-block sh-button-return" onclick='uc.common.linkTo("/user")'>
+			<%= back %>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+	initUpload();
+	initHead();
+});
+
+function initHead () {
+	uc.req.post(URL_USER_HEAD_GET, {}, function(result, data) {
+		if (result) {
+			if (data.headUrl) {
+				$("#sh-img").attr("src", data.headUrl);
+			}
+			else {
+				$("#sh-img").attr("src", "/img/head.jpg");
+			}
+		}
+	});
+}
+
+function initUpload () {
+	var input = document.querySelector('input');
+
+	input.onchange = function () {
+	    lrz(this.files[0], {width: 120, height: 120, quality: 1}, function (results) {
+	    	// 你需要的数据都在这里，可以以字符串的形式传送base64给服务端转存为图片。
+	    	console.log(results);
+	    	var data = {
+	    		header: results.base64
+	    	}
+	    	uc.req.post(URL_USER_HEAD_UPLOAD, data, function(result, data) {
+	      		if (result) {
+					showImg(results.base64);
+	      		}
+	    	});
+	    });
+	}
+}
+
+function showImg (src) {
+	var imgSrc = typeof src === 'string' ? src : URL.createObjectURL(src);
+	$("#sh-img").attr("src", imgSrc);
+}
+</script>
+</html>

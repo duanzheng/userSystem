@@ -1,0 +1,28 @@
+#sh-img-container {
+	width: 120px;
+	margin: 20px auto;
+}
+#sh-img {
+	width: 120px;
+	margin: 0 auto;
+}
+#sh-button-container {
+	margin-top: 20px;
+}
+.sh-button-upload {
+	margin: 0 auto;
+	border: 1px solid #00CC66;
+	position: relative;
+}
+.sh-button-return {
+	margin: 0 auto;
+	margin-top: 10px;
+}
+#sh-input-upload {
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0;
+	height: 100%;
+	width: 100%;
+}

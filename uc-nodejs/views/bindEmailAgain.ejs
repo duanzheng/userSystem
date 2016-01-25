@@ -1,0 +1,53 @@
+<% include header %>
+<link rel="stylesheet" type="text/css" href="../css/bindEmail.css"/>
+<body>
+	<header class="uc-header-normal">
+		<div class="uc-header-back" onclick='uc.common.linkTo("/user/accountSet")'>
+			<i class="fa fa-angle-left"></i>
+	    </div>
+        <div class="uc-header-text">
+            <%= title %>
+        </div>
+	</header>
+	<div id="be-input-container">
+		<div class="uc-input-line">
+			<div class="uc-input-title">
+				<%= email %>：
+			</div>
+			<input type="email" id="email" class="uc-input-text" value="" />
+		</div>
+		<div class="be-btn-block" onclick="bindEmail()">
+			<%= bindEmail %>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+function bindEmail () {
+	if (checkEmail($("#email").val())) {
+		var data = {
+			email: $("#email").val()
+		}
+		uc.common.showWaiting();
+		$.post(URL_USER_BIND_EMAIL, data, function (result) {
+			uc.common.hideWaiting();
+			if (result.result == 0) {
+                uc.common.linkTo("/user/bindEmailPrompt");
+			}
+			else {
+                showPrompt(result.msg);
+			}
+		});
+	}
+}
+
+function checkEmail(v) {
+    if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(v)) {
+        showPrompt(<%- JSON.stringify(checkEmail) %>);
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+</script>
+</html>
